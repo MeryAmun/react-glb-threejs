@@ -1,4 +1,4 @@
-import { useGLTF, Stage, PresentationControls } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 
 
 
