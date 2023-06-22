@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import { Loader } from "./components/index";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Link} from "react-router-dom";
 import GlbDetails from "./pages/GlbDetails";
 import Home from "./pages/home/Home";
-import Model from "./pages/Model";
-import { Canvas } from "@react-three/fiber";
-import { Stage, PresentationControls } from "@react-three/drei";
+import ViewGlb from "./pages/ViewGlb";
+
 
 function App() {
   const [loading, setLoading] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [point, setPoint] = useState(5.01);
   const [responseData, setResponseData] = useState(
     JSON.parse(localStorage.getItem(searchTerm.toString()))
   );
@@ -32,9 +30,7 @@ function App() {
     setResponseData(JSON.parse(localStorage.getItem(searchTerm.toString())));
   }, [searchTerm]);
 
-  const handleRotate = () => {
-    //setRotation()
-  };
+
 
 
   if (loading) {
@@ -42,6 +38,13 @@ function App() {
   }
   return (
     <div className="App">
+      <div className="search__container">
+      <Link to='/view-glb' className="viewGlb__btn">
+     Load GLB
+    </Link>
+      <Link to='/' className="home__btn">
+    Home
+    </Link>
       <div className="search">
         <form onSubmit={handleSearch} className="input">
           <input
@@ -54,43 +57,14 @@ function App() {
           />
         </form>
       </div>
+      </div>
 
       <Routes>
         <Route path="" element={<Home responseData={responseData} />} />
         <Route path="/glb-details/:id" element={<GlbDetails />} />
+        <Route path="/view-glb" element={<ViewGlb />} />
       </Routes>
-      <div className="rotation__inputContainer">
-        <input
-          type="number"
-          className="rotation__input"
-          margin="normal"
-          placeholder="Enter scale"
-          value={point}
-          onChange={(e) => setPoint(e.target.value)}
-        />
-        <button className="rotation__btn" onClick={handleRotate}>
-         Enter scale
-        </button>
-      </div>
-      <Canvas
-        dpr={[1, 2]}
-        shadows
-        camera={{ fov: 45 }}
-        className="app__glbContainer"
-      >
-        <color attach="background" args={["#101010"]} />
-        <PresentationControls
-          speed={1.5}
-          global
-          zoom={5.5}
-          rotation={[25, 60, 80]}
-          polar={[-0.1, Math.PI / 4]}
-        >
-          <Stage environment={"warehouse"}>
-            <Model scale={point} />
-          </Stage>
-        </PresentationControls>
-      </Canvas>
+      
     </div>
   );
 }
